@@ -12,10 +12,15 @@ import {
   Text,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { useState } from "react";
 
 const Index = () => {
+  const [variables, setVariables] = useState({
+    limit: 30,
+    cursor: null as string | null,
+  });
   const [{ data, fetching }] = usePostsQuery({
-    variables: { limit: 5 },
+    variables,
   });
 
   if (!fetching && !data) {
@@ -32,18 +37,30 @@ const Index = () => {
       {!data && fetching ? (
         <div>Loading...</div>
       ) : (
-        <Stack spacing={8}>
-          {data!.posts.map((p) => (
-            <Box key={p.id} p={5} shadow="md" borderWidth="1px">
-              <Heading fontSize="xl">{p.title}</Heading>
-              <Text mt={4}>{p.textSnippet}</Text>
-            </Box>
-          ))}
+        <Stack spacing={8} mb={data!.posts.hasMore ? 0 : 8}>
+          {data &&
+            data.posts.posts.map((p) => (
+              <Box key={p.id} p={5} shadow="md" borderWidth="1px">
+                <Heading fontSize="xl">{p.title}</Heading>
+                <Text mt={4}>{p.textSnippet}</Text>
+              </Box>
+            ))}
         </Stack>
       )}
-      {data ? (
+      {data && data.posts.hasMore ? (
         <Flex>
-          <Button isLoading={fetching} colorScheme="teal" margin="auto" my={8}>
+          <Button
+            onClick={() => {
+              setVariables({
+                limit: variables.limit,
+                cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
+              });
+            }}
+            isLoading={fetching}
+            colorScheme="teal"
+            margin="auto"
+            my={8}
+          >
             Load more
           </Button>
         </Flex>
