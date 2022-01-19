@@ -15,7 +15,7 @@ import { Post } from "./Post";
 export class User extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn()
-  _id!: number;
+  id!: number;
 
   @Field()
   @Column({ unique: true })
