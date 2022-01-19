@@ -120,7 +120,7 @@ export const createUrqlClient = (ssrExchange: any) => ({
               }
             );
           },
-          register: (_result, args, cache, info) => {
+          register: (_result, _, cache, __) => {
             betterUpdateQuery<RegisterMutation, MeQuery>(
               cache,
               { query: MeDocument },
