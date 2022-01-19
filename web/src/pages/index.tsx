@@ -1,4 +1,3 @@
-import NavBar from "../components/NavBar";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { usePostsQuery } from "../generated/graphql";
@@ -7,7 +6,9 @@ import { Link } from "@chakra-ui/react";
 import NextLink from "next/link";
 
 const Index = () => {
-  const [{ data }] = usePostsQuery();
+  const [{ data }] = usePostsQuery({
+    variables: { limit: 5 },
+  });
   return (
     <Layout>
       <NextLink href="/create-post">
